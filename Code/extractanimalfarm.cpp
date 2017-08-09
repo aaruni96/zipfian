@@ -1,14 +1,15 @@
 #include<iostream>
 #include<fstream>
-#include<stdio.h>
+#include<string.h>
 
 using namespace std;
 
 int main()
 {
-	char inchar;
-	unsigned long long int ar[26];
-	for(int i=0;i<26;i++)
+	int wcount=0,flag;
+	char inword[256],words[30380][256];
+	unsigned long long int ar[30380];
+	for(int i=0;i<30380;i++)
 	{
 		ar[i]=0;
 	}
@@ -21,100 +22,53 @@ int main()
 		return 1;
 	}
 	
-	while(in>>inchar)
+	while(in>>inword)
 	{
-		inchar=tolower(inchar);
-		if (inchar<'a' || inchar>'z')
+		for(int i=0;i<int(strlen(inword));i++)		//normalising words, stripping capitalisation and punctuations
 		{
-			continue;
+			inword[i]=tolower(inword[i]);		//everything is now lower case
+			if(inword[i]<'a' || inword[i]>'z')
+			{
+				if (i>0)
+				{
+					inword[i]='\0';		//all rear punctuations are now gone
+				}
+				else	//front punctuations
+				{
+					for(int j=0; ; j++)
+					{
+						if(inword[j]=='\0')
+							break;
+						inword[j]=inword[j+1];
+					}
+				}
+			}
+			inword[i]=tolower(inword[i]);
 		}
 		
-		switch (inchar)
-		{ 
-			case 'a' :
-				ar[0]+=1;
+		if(!strlen(inword))
+			continue;
+		for(int i=0;i<wcount;i++)
+		{
+			flag=0;
+			if(!strcmp(inword,words[i]))
+			{
+				ar[i]++;
+				flag=1;
 				break;
-			case 'b' : 
-				ar[1]+=1;
-				break;
-			case 'c' : 
-				ar[2]+=1;
-				break;
-			case 'd' : 
-				ar[3]+=1;
-				break;
-			case 'e' : 
-				ar[4]+=1;
-				break;
-			case 'f' : 
-				ar[5]+=1;
-				break;
-			case 'g' : 
-				ar[6]+=1;
-				break;
-			case 'h' : 
-				ar[7]+=1;
-				break;
-			case 'i' : 
-				ar[8]+=1;
-				break;
-			case 'j' : 
-				ar[9]+=1;
-				break;
-			case 'k' : 
-				ar[10]+=1;
-				break;
-			case 'l' : 
-				ar[11]+=1;
-				break;
-			case 'm' : 
-				ar[12]+=1;
-				break;
-			case 'n' : 
-				ar[13]+=1;
-				break;
-			case 'o' : 
-				ar[14]+=1;
-				break;
-			case 'p' : 
-				ar[15]+=1;
-				break;
-			case 'q' : 
-				ar[16]+=1;
-				break;
-			case 'r' : 
-				ar[17]+=1;
-				break;
-			case 's' : 
-				ar[18]+=1;
-				break;
-			case 't' : 
-				ar[19]+=1;
-				break;
-			case 'u' : 
-				ar[20]+=1;
-				break;
-			case 'v' : 
-				ar[21]+=1;
-				break;
-			case 'w' : 
-				ar[22]+=1;
-				break;
-			case 'x' : 
-				ar[23]+=1;
-				break;
-			case 'y' : 
-				ar[24]+=1;
-				break;
-			case 'z' : 
-				ar[25]+=1;
-				break;
+			}
+		}
+		if(!flag)
+		{
+			strcpy(words[wcount+1],inword);
+			ar[wcount+1]++;
+			wcount++;
 		}
 	}
 	
-	for(int i=0;i<26;i++)
+	for(int i=1;i<wcount;i++)
 	{
-		cout<<char('a'+i)<<'\t'<<ar[i]<<endl;
+		cout<<words[i]<<'\t'<<ar[i]<<endl;
 	}
 		
 	return 0;
