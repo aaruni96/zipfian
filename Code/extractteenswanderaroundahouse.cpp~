@@ -35,6 +35,7 @@ int main()
 				}
 				else	//front punctuations
 				{
+					x:;
 					//cout<<"inf loop, lol\n";
 					if(strlen(inword)==1)
 					{
@@ -45,6 +46,10 @@ int main()
 						if(inword[j]=='\0')
 							break;
 						inword[j]=inword[j+1];
+						if(inword[j]<'a' || inword[j]>'z')
+						{
+							goto x;
+						}
 					}
 				}
 			}
